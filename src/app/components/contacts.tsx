@@ -83,7 +83,7 @@ export default function Contacts() {
           >
             <p className="mb-4 text-gray-400">Prefer email?</p>
             <a
-              href="mailto:contact@example.com"
+              href="mailto:shamveelkhilji@gmail.com"
               className="group inline-block text-xl font-medium text-white sm:text-2xl"
             >
               <span className="relative">
