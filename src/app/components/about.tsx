@@ -46,14 +46,14 @@ export default function About() {
             >
               <h3 className="mb-6 text-3xl font-bold">Shamveel Khan</h3>
               <p className="mb-6 leading-relaxed text-gray-100">
-              I'm a computer science student at FAST Karachi, passionate about building intelligent and efficient software solutions.
+              I&#39;m a computer science student at FAST Karachi, passionate about building intelligent and efficient software solutions.
               With a strong foundation in programming and a curiosity-driven mindset,
               I enjoy working on projects that blend creativity with problem-solving
               </p>
               <p className="mb-6 leading-relaxed text-gray-300">
               My current work spans game development and web applications, with projects built using Raylib for graphics, ENet for networking, and React for dynamic user interfaces.
-              I'm especially interested in Artificial Intelligence and Computer Vision,
-               and I'm actively learning how to apply these technologies to real-world problems.
+              I&#39;m especially interested in Artificial Intelligence and Computer Vision,
+               and I&#39;m actively learning how to apply these technologies to real-world problems.
               </p>
 
               <div className="mb-8">
