@@ -23,7 +23,7 @@ const projectsData: Project[] = [
       "ChefGPT is a web application built with React that leverages Mixtral AI to generate recipe suggestions based on the ingredients you have on hand. It offers an intuitive interface where users can input available ingredients, and the AI responds with creative and practical meal ideas. The project focuses on convenience, helping users reduce food waste and discover new dishes without the need for constant grocery runs.",
     imageUrl: "/chefgpt.jpg",
     link: "https://chef-gpt-one.vercel.app/",
-    date: "May 2023",
+    date: "January 2025",
   },
   {
     id: "2",
@@ -32,7 +32,7 @@ const projectsData: Project[] = [
       "This project is a modern take on the classic Pong game, developed using Raylib for 2D graphics and ENet, a reliable UDP networking library, to enable real-time multiplayer gameplay over the internet. The game supports smooth online matches, allowing players to compete remotely with low-latency interactions. It was a hands-on exercise in both game development and network programming fundamentals.",
     imageUrl: "/pong.jpg",
     link: "https://github.com/Shamveel-Khan/Pong-OOP",
-    date: "August 2023",
+    date: "May 2025",
   },
   {
     id: "3",
@@ -41,7 +41,7 @@ const projectsData: Project[] = [
       "This browser extension introduces a dark mode theme for GCR (Google Classroom Review), designed to reduce eye strain during extended usage, especially in low-light environments. By applying custom styles, it transforms the bright default interface into a more visually comfortable experience. The project demonstrates attention to user experience and front-end customization.",
     imageUrl: "/darkmode.png",
     link: "https://github.com/Shamveel-Khan/darkModeForGoogleClassroom",
-    date: "October 2023",
+    date: "December 2024",
   },
   {
     id: "4",
@@ -50,7 +50,7 @@ const projectsData: Project[] = [
       "Tenzies is a simple yet engaging game built in React, where players roll ten dice and try to get all of them to show the same number. The game includes logic to hold certain dice between rolls and tracks the number of rolls it takes to win. It’s a fun way to explore state management and component-based design in React while offering a smooth, interactive gameplay experience.",
     imageUrl: "/tenzies.jpg",
     link: "https://tenzies-shamveelkhan.vercel.app/",
-    date: "December 2023",
+    date: "February 2025",
   },
 ]
 
