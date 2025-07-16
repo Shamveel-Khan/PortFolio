@@ -46,15 +46,14 @@ export default function About() {
             >
               <h3 className="mb-6 text-3xl font-bold">Shamveel Khan</h3>
               <p className="mb-6 leading-relaxed text-gray-100">
-              I&#39;m a computer science student at FAST Karachi, passionate about building intelligent and efficient software solutions.
-              With a strong foundation in programming and a curiosity-driven mindset,
-              I enjoy working on projects that blend creativity with problem-solving
+              I'm a Computer Science student at FAST Karachi with a strong interest in cybersecurity and secure systems design. I’m drawn to understanding how software systems can be broken — and more importantly, how to defend them.
               </p>
               <p className="mb-6 leading-relaxed text-gray-300">
-              My current work spans game development and web applications, with projects built using Raylib for graphics, ENet for networking, and React for dynamic user interfaces.
-              I&#39;m especially interested in Artificial Intelligence and Computer Vision,
-               and I&#39;m actively learning how to apply these technologies to real-world problems.
+              My current work includes developing web applications and games using technologies like React, ENet, and Raylib, while also diving deep into web security fundamentals. I’ve been actively exploring areas such as cross-site scripting (XSS), broken authentication, and input validation vulnerabilities through hands-on labs and testing environments.
               </p>
+               <p className="mb-6 leading-relaxed text-gray-300">
+              Outside of development, I focus on ethical hacking techniques, automation using Python, and structured reconnaissance workflows to sharpen my practical security skills. I aim to bridge the gap between building software and securing it — with an eye toward solving real-world security problems through code, research, and continuous learning.
+               </p>
 
               <div className="mb-8">
                 <h4 className="mb-4 text-xl font-semibold">Skills</h4>
