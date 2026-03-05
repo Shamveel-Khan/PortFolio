@@ -46,10 +46,10 @@ export default function About() {
             >
               <h3 className="mb-6 text-3xl font-bold">Shamveel Khan</h3>
               <p className="mb-6 leading-relaxed text-gray-100">
-              I'm a Computer Science student at FAST Karachi with a strong interest in cybersecurity and secure systems design. I’m drawn to understanding how software systems can be broken — and more importantly, how to defend them.
+              I&apos;m a Computer Science student at FAST Karachi with a strong interest in cybersecurity and secure systems design. I’m drawn to understanding how software systems can be broken — and more importantly, how to defend them.
               </p>
               <p className="mb-6 leading-relaxed text-gray-300">
-              My current work includes developing web applications and games using technologies like React, ENet, and Raylib, while also diving deep into web security fundamentals. I’ve been actively exploring areas such as cross-site scripting (XSS), broken authentication, and input validation vulnerabilities through hands-on labs and testing environments.
+              My current work includes developing web applications and games using technologies like React, ENet, and Raylib, while also diving deep into web security fundamentals. I&apos;ve been actively exploring areas such as cross-site scripting (XSS), broken authentication, and input validation vulnerabilities through hands-on labs and testing environments.
               </p>
                <p className="mb-6 leading-relaxed text-gray-300">
               Outside of development, I focus on ethical hacking techniques, automation using Python, and structured reconnaissance workflows to sharpen my practical security skills. I aim to bridge the gap between building software and securing it — with an eye toward solving real-world security problems through code, research, and continuous learning.
