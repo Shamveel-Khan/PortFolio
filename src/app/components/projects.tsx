@@ -36,6 +36,15 @@ const projectsData: Project[] = [
     },
     {
         id: "3",
+        name: "Done All Portswigger labs on XSS, CSRF, IDOR, and Authentication",
+        description:
+            "I have successfully completed all PortSwigger Web Security Labs covering XSS (Cross-Site Scripting), CSRF (Cross-Site Request Forgery), Authentication vulnerabilities, and IDOR (Insecure Direct Object References). These labs strengthened my skills in vulnerability identification, exploitation, and mitigation, providing hands-on experience with real-world web application security scenarios.",
+        imageUrl: "/labs.png",
+        link: "https://chef-gpt-one.vercel.app/",
+        date: "June 2026",
+    },
+    {
+        id: "4",
         name: "ChefGPT",
         description:
             "ChefGPT is a React-based web application powered by Mixtral AI that generates recipe suggestions based on available ingredients. The project demonstrates API integration, state management, and responsive UI design while focusing on delivering a smooth and interactive user experience.",
@@ -44,7 +53,7 @@ const projectsData: Project[] = [
         date: "January 2025",
     },
     {
-        id: "4",
+        id: "5",
         name: "Pong (Raylib + ENet)",
         description:
             "A multiplayer Pong game developed using Raylib for 2D rendering and ENet for reliable UDP-based networking. The project focused on real-time communication, low-latency gameplay, and network synchronization, providing hands-on experience with game development and networking fundamentals.",
@@ -53,7 +62,7 @@ const projectsData: Project[] = [
         date: "May 2025",
     },
     {
-        id: "5",
+        id: "6",
         name: "Dark Mode – Google Classroom Extension",
         description:
             "A browser extension that introduces a dark theme for Google Classroom to improve visual comfort during prolonged use. Implemented custom CSS overrides and DOM manipulation techniques to enhance usability while maintaining compatibility with the existing interface.",
@@ -62,7 +71,7 @@ const projectsData: Project[] = [
         date: "December 2024",
     },
     {
-        id: "6",
+        id: "7",
         name: "Tenzies",
         description:
             "A React-based dice game where players aim to roll all dice to the same number. Built to explore component-based architecture, state management, and interactive UI logic while delivering a clean and responsive user experience.",
