@@ -32,7 +32,6 @@ const categories: ProjectCategory[] = [
 
 const projectsData: Project[] = [
     // ==================== CYBERSECURITY ====================
-
     {
         id: "velton-cyber",
         name: "Velton – Secure Full Stack Development",
@@ -43,7 +42,7 @@ const projectsData: Project[] = [
         date: "JAN 2026",
         category: "Cybersecurity",
     },
-    
+
     {
         id: "cyber-1",
         name: "Authorization Hack – FAST Connect",
@@ -156,7 +155,7 @@ const projectsData: Project[] = [
         name: "Playwright QA Automation",
         description:
             "Built Playwright-based UI and API automation in TypeScript using Page Object Model (POM), covering login flows, smoke tests, data-driven negative scenarios, and API contract validation. Implemented flaky-test handling with retries, stable locators, expect.poll assertions, and failure diagnostics including screenshots, videos, traces, and HTML reports.",
-        imageUrl: "/labs.png",
+        imageUrl: "/playwright.png",
         link: "https://github.com/Shamveel-Khan/playwright-qa-auto",
         date: "2025",
         category: "SQA",
@@ -167,7 +166,7 @@ const projectsData: Project[] = [
         name: "Playwright SQA Demo",
         description:
             "Built a Playwright automation framework for login testing with reusable POM classes and common test steps to improve maintainability and test reuse. Added data parameterization using external CSV and mock data to execute repeatable login scenarios across multiple input combinations.",
-        imageUrl: "/darkmode.png",
+        imageUrl: "/playwright2.webp",
         link: "https://github.com/Shamveel-Khan/Playwirght-demo-SQA",
         date: "2025",
         category: "SQA",
