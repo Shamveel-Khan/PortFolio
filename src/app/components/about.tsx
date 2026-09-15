@@ -53,34 +53,31 @@ export default function About() {
                                 Shamveel Khan
                             </h3>
                             <p className="mb-6 leading-relaxed text-gray-100">
-                                I`m a Computer Science student at FAST Karachi
-                                with a strong focus on cybersecurity and secure
-                                systems design. I&aposm passionate about
-                                understanding how software and web applications
-                                can be exploited — and more importantly, how to
-                                defend them against real-world threats. My goal
-                                is to bridge the gap between development and
-                                security while continuously advancing my
-                                practical expertise.
+                                I`m a Computer Science
+                                student at FAST Karachi with a strong focus on cybersecurity, AI, and
+                                backend development. I'm passionate about building intelligent
+                                systems while understanding how software and web applications can be
+                                exploited — and more importantly, how to secure them against
+                                real-world threats. My goal is to bridge the gap between development,
+                                AI, and security while continuously advancing my practical expertise.
                             </p>
                             <p className="mb-6 leading-relaxed text-gray-300">
-                                I`m currently interning at Velton as a
-                                full-stack developer with a security-focused
-                                role, where I contribute to building robust and
-                                secure applications. My work involves ethical
-                                hacking, automated testing with Python, and
-                                structured reconnaissance workflows, allowing me
-                                to apply security principles directly to
-                                real-world projects.{" "}
+                                I`m
+                                currently working at Velton as a full-stack developer, contributing to
+                                real-world web applications and AI-driven products. My experience spans
+                                frontend and backend development, secure application design, automated
+                                testing, and AI workflows, allowing me to work across different parts
+                                of the software development lifecycle and apply my skills to practical
+                                projects.
                             </p>
                             <p className="mb-6 leading-relaxed text-gray-300">
-                                I`ve also completed all PortSwigger labs
-                                covering XSS, authentication flaws, CSRF, and
-                                IDOR, gaining hands-on experience in discovering
-                                and exploiting web vulnerabilities. Recently, I
-                                successfully identified security issues in a
-                                FAST senior project, putting my offensive skills
-                                to the test in realistic scenarios.
+                                I`ve
+                                also completed all PortSwigger labs covering XSS, authentication flaws,
+                                CSRF, and IDOR, gaining hands-on experience in discovering and
+                                exploiting web vulnerabilities. Alongside cybersecurity, I&aposve built
+                                AI projects including an ECG-based model for predicting cardiac
+                                conditions, Image2Depth, DeepFaceEdit, and computer vision systems,
+                                combining research with practical software development.
                             </p>
 
                             <div className="mb-8">
