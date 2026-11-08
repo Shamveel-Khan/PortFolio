@@ -1,0 +1,24 @@
+{
+  "name": "Shamveel Khan",
+  "location": "Karachi, Pakistan",
+  "timeZone": "Asia/Karachi",
+  "education": "CS Junior @ FAST-NUCES",
+  "role": "Software Developer | AI & Cybersecurity Enthusiast",
+  "heroIntro": "Software Developer | AI & Cybersecurity Enthusiast. CS Junior @ FAST-NUCES, based in Karachi, Pakistan.",
+  "aboutHeading": "Curiosity drives the code.",
+  "portrait": "/images/pic-about.webp",
+  "portraitAlt": "Portrait of Shamveel Khan",
+  "biography": [
+    "I'm Shamveel, a computer science junior at FAST-NUCES in Karachi, Pakistan. I build software and explore the intersection of artificial intelligence and cybersecurity.",
+    "My work spans full stack applications, machine learning, and hands-on security research. I enjoy turning an idea into something useful, understanding how a system works, and finding ways to make it more reliable and secure."
+  ],
+  "interests": [
+    "Software development",
+    "Artificial intelligence",
+    "Cybersecurity"
+  ],
+  "aboutLabel": "02 / THE PERSON BEHIND THE CODE",
+  "aboutWord": "ABOUT",
+  "aboutCta": "Let's connect",
+  "portraitCaption": "Always learning. Always building."
+}
