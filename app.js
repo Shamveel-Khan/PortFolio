@@ -44,14 +44,37 @@ const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 8000)
 const field = new THREE.Group()
 scene.add(field)
 const loaderEl = $("#loader")
-// ---------- loading: the V mark is drawn exactly as fast as the site loads ----------
-// Progress comes from the bytes of the image sheets as they arrive (85%), then building the scene (15%). The drawing
-// follows that progress smoothly (never faster than a natural hand, about 1.6s), and the site appears the moment the
-// second stroke closes.
-const ldPens = [...document.querySelectorAll(".ld-pen")]
+// Keep the logo visible and all navigation locked until the final arrival pose
+// has actually been rendered. Shared links also wait for this same readiness gate.
+let heroReady = false, heroReleaseScheduled = false, resolveHeroReady
+const heroSettled = new Promise((resolve) => { resolveHeroReady = resolve })
+const startupElements = [...document.querySelectorAll(".topbar, #intro, #mnav, #box, #projects")]
+startupElements.forEach((el) => { el.inert = true })
+if ("scrollRestoration" in history) history.scrollRestoration = "manual"
+scrollTo({ top: 0, behavior: "instant" })
+for (const type of ["wheel", "touchmove"]) addEventListener(type, (e) => {
+  if (!heroReady) { e.preventDefault(); e.stopImmediatePropagation() }
+}, { capture: true, passive: false })
+addEventListener("keydown", (e) => {
+  if (!heroReady && ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(e.key)) { e.preventDefault(); e.stopImmediatePropagation() }
+}, { capture: true })
+addEventListener("scroll", () => { if (!heroReady && scrollY !== 0) scrollTo({ top: 0, behavior: "instant" }) }, { passive: true })
+function releaseHeroAfterRender() {
+  if (heroReady || heroReleaseScheduled || introStart >= 0 || introEnd <= 0) return
+  heroReleaseScheduled = true
+  // Two animation frames allow the finished WebGL frame to reach the screen.
+  raf(() => raf(() => {
+    heroReady = true
+    document.documentElement.classList.remove("hero-loading")
+    startupElements.forEach((el) => { el.inert = false })
+    loaderEl.classList.add("done")
+    loaderEl.setAttribute("aria-hidden", "true")
+    resolveHeroReady()
+  }))
+}
+// Byte progress still drives the existing loading milestones and diagnostics.
 const LD = { target: 0, shown: 0, t0: performance.now(), last: performance.now(), done: false, resolve: null, raf: 0 }
 const setLoad = (p) => { LD.target = Math.max(LD.target, Math.min(1, p)) }
-const ldEase = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
 function ldFrame(now) {
   const dt = Math.min(0.25, (now - LD.last) / 1000); LD.last = now
   const pace = Math.min(1, (now - LD.t0) / 1600)                 // a hand needs at least this long
@@ -60,10 +83,6 @@ function ldFrame(now) {
   if (LD.target >= 1 && pace >= 1 && LD.shown > 0.996) LD.shown = 1
   const p = LD.shown
   if (params.get("timer")) (LD.log = LD.log || []).push([Math.round(now), +LD.target.toFixed(2), +p.toFixed(2)])
-  const s1 = ldEase(p / 0.58), s2 = ldEase((p - 0.44) / 0.56)   // the curve starts just before the first stroke ends
-  if (ldPens[0]) ldPens[0].style.strokeDashoffset = (1 - s1).toFixed(4)
-  if (ldPens[1]) ldPens[1].style.strokeDashoffset = (1 - s2).toFixed(4)
-  if (p >= 1) loaderEl.classList.add("drawn")
   if (p >= 1 && LD.resolve) { const r = LD.resolve; LD.resolve = null; r(); return }
   raf(ldFrame)
 }
@@ -164,6 +183,7 @@ const frag = (hi) => /* glsl */ `
 
 // ---------- state ----------
 let D, mesh, N = 0, T = 0, CAP = 0, P = 1384
+let missingHi = new Set()
 const MOTES = 260                 // small images drifting in from the dark to join the portrait
 const uniforms = { uProjects: { value: 0 }, uCategoryMix: { value: new Float32Array([0, 1, 0, 0, 0, 0, 0, 0]) }, uCategoryHover: { value: 0 }, uShift: { value: SHIFT }, uFog: { value: 0 }, uFogV: { value: 0 }, uBlur: { value: 0 }, uBg: { value: new THREE.Vector3(...BG) }, uSoft: { value: 0 }, uT: { value: 0 }, uHi: { value: params.has("glow") ? 1 : 0 } }   // uSoft: the field steps back (softer, dimmer) while a card is open
 let STRIDE = 2, streamCount = 1, streamRank
@@ -581,6 +601,7 @@ function updateLane() {
 
 async function init() {
   D = await (await fetch("data/cosmos.json")).json()
+  missingHi = new Set(D.missingHi || [])
   N = D.cells.length; T = N + LANE.n; CAP = T + MOTES; P = D.period || P
   STRIDE = Math.max(1, Math.ceil(N / (D.images.length * 0.8)))
   const st = []; for (let i = 0; i < N; i += STRIDE) st.push(i)
@@ -673,18 +694,17 @@ async function init() {
   await sigBakeP
   setLoad(1)
   await loaderDrawn()
-  loaderEl.classList.add("done")
   introStart = performance.now(); alog('intro')
   // arriving from the 404 page's flight: carry straight on into the work
-  if (params.get("fly")) { enterFlight(); TRK("not_found_flight"); target = 460; try { const u = new URL(location.href); u.searchParams.delete("fly"); history.replaceState(null, "", u) } catch {} }
+  if (params.get("fly")) heroSettled.then(() => { enterFlight(); TRK("not_found_flight"); target = 460; try { const u = new URL(location.href); u.searchParams.delete("fly"); history.replaceState(null, "", u) } catch {} })
   // opened from a shared link: fly in a little and open that work once the portrait has formed
   // ?open=about / ?open=contact (links from the 404 page's top bar): open that page once the portrait has formed
   const openV = params.get("open")
-  if (openV === "about" || openV === "contact" || openV === "selected") { try { const u = new URL(location.href); u.searchParams.delete("open"); history.replaceState(null, "", u) } catch {}; setTimeout(() => { openFrom = "nav"; if (openV === "selected") $("#work-open").click(); else navigateStory(openV) }, 1800) }
+  if (openV === "about" || openV === "contact" || openV === "selected") { try { const u = new URL(location.href); u.searchParams.delete("open"); history.replaceState(null, "", u) } catch {}; heroSettled.then(() => { openFrom = "nav"; if (openV === "selected") $("#work-open").click(); else navigateStory(openV) }) }
   const shared = params.get("work")
   if (shared) {
     const j = D.images.findIndex((im) => im[4].split("/").pop().replace(/\.\w+$/, "") === shared)
-    if (j >= 0) { TRK("shared_link_open", { work: shared }); setTimeout(() => { enterFlight(); target = Math.max(target, 260); setTimeout(() => { openSrc = "shared_link"; openProject(D.images[j][0], D.images[j][1]) }, 1400) }, 2600) }
+    if (j >= 0) { TRK("shared_link_open", { work: shared }); heroSettled.then(() => { enterFlight(); target = Math.max(target, 260); setTimeout(() => { openSrc = "shared_link"; openProject(D.images[j][0], D.images[j][1]) }, 1400) }) }
   }
   addEventListener("resize", resize)
   if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(canvas)
@@ -877,6 +897,7 @@ let seenFrame = 0
 function trackSeen() {
   if (++seenFrame % 8) return
   for (let i = 0; i < T; i++) {
+    if (missingHi.has(tileImg[i])) continue
     const w = world[i], z = w.pos.z - camera.position.z
     if (z > -w.h * 2.6) continue
     if ((w.h / -z) * focal < SEEN_PX) continue
@@ -1030,6 +1051,7 @@ function tick(now) {
     flush()
   }
   drawSoft()
+  releaseHeroAfterRender()
   raf(tick)
 }
 
@@ -1106,6 +1128,24 @@ function setUrl(id) { try { const u = new URL(location.href); if (id) u.searchPa
 let openSrc = "field"
 // work that doesn't change what you see waits until the click has been painted (keeps taps feeling instant)
 const afterPaint = (fn) => requestAnimationFrame(() => setTimeout(fn, 0))
+const previewAtlases = new Map()
+async function atlasPreview(layer, slot) {
+  const atlas = D.atlases[layer]
+  if (!previewAtlases.has(layer)) {
+    const image = new Image()
+    const pending = new Promise((resolve, reject) => {
+      image.onload = () => resolve(image); image.onerror = reject
+      image.src = `${sheetSrc(atlas)}?v=${D.v}`
+    })
+    previewAtlases.set(layer, pending)
+    if (previewAtlases.size > 2) previewAtlases.delete(previewAtlases.keys().next().value)
+  }
+  const image = await previewAtlases.get(layer)
+  const width = image.naturalWidth / atlas.cols, height = image.naturalHeight / atlas.rows
+  const thumb = document.createElement("canvas"); thumb.width = width; thumb.height = height
+  thumb.getContext("2d").drawImage(image, slot % atlas.cols * width, Math.floor(slot / atlas.cols) * height, width, height, 0, 0, width, height)
+  return thumb.toDataURL("image/webp", .9)
+}
 function openProject(pi, mi) {
   const p = D.projects[pi], src = openSrc; openSrc = "field"
   openId = workId(pi, mi)
@@ -1121,7 +1161,7 @@ function openProject(pi, mi) {
   const m = p.m[mi] || p.m[0]
   // a case study opens whole: the piece you clicked first, then every other image of the study under it (the box scrolls);
   // a Dribbble shot of that client opens the same way, with the study's images under it
-  const all = study ? [m, ...(study === p ? p.m : [...p.m, ...study.m]).filter((x) => x !== m)] : [m]
+  const all = study ? [m, ...(study === p ? p.m : [...p.m, ...study.m]).filter((x) => x !== m && !x.unavailable)] : [m]
   // anything taller than the usual 4:3 frame (square, portrait) sits in that frame, cropped; wider pieces (16:9) keep their shape
   const isCrop = (x) => { const nat = x.w && x.h ? x.w / x.h : 0; return nat > 0 && nat < 1.3 }
   const aspectOf = (x) => { const nat = x.w && x.h ? x.w / x.h : 0; return isCrop(x) ? 4 / 3 : nat }
@@ -1130,10 +1170,15 @@ function openProject(pi, mi) {
   scrollEl.style.setProperty("--ar", String(curAspect || 4 / 3))   // the first piece's frame in a scrolling card
   gallery.innerHTML = all.map((x, n) => {
     const cls = isCrop(x) ? ' class="crop"' : "", lazy = n ? ' loading="lazy"' : ""
+    if (x.atlas) return `<figure${cls}><img data-atlas-layer="${x.atlas.layer}" data-atlas-slot="${x.atlas.slot}" alt="Project preview" decoding="async" onload="this.classList.add('in')"></figure>`
     return x.v
       ? `<figure${cls}><video src="${x.v}" poster="${x.s}" autoplay muted loop playsinline${n ? ' preload="none"' : ""}></video></figure>`
       : `<figure${cls}><img src="${x.s}" alt="" decoding="async"${lazy} onload="this.classList.add('in')"></figure>`
   }).join("")
+  gallery.querySelectorAll("[data-atlas-layer]").forEach((image) => {
+    atlasPreview(Number(image.dataset.atlasLayer), Number(image.dataset.atlasSlot))
+      .then((url) => { image.src = url }).catch(() => { image.alt = "Preview unavailable" })
+  })
   $("#p-count").textContent = all.length > 1 ? `${all.length} pieces` : ""
   const el = gallery.querySelector("img, video")
   if (!curAspect) el.addEventListener(m.v ? "loadedmetadata" : "load", () => {
@@ -1539,4 +1584,4 @@ function motes(now, ease) {
 
 window.__cosmos = { aim, lanePos, get laneK() { return laneK }, get N() { return N }, screen: (i) => { const v = world[i].pos.clone().applyMatrix4(field.matrixWorld).project(camera); return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H, v.z] }, pick, openProject, pointer, pxHeight, get hover() { return hoverTile }, get world() { return world }, get dist() { return dist }, set target(v) { target = v }, get seen() { return seenCount }, get mesh() { return mesh }, camera, projectOf: (i) => D.projects[D.images[tileImg[i]][0]].t }
 Object.defineProperty(window, "__cosmosD", { get: () => D })
-init().catch((e) => { console.error(e); loaderEl.setAttribute("aria-label", "Could not load the work") })
+init().catch((e) => { console.error(e); loaderEl.setAttribute("aria-label", "Could not load the portfolio"); $("#loading-label").textContent = "Could not load. Please refresh to try again." })

@@ -1,0 +1,12 @@
+{
+  "name": "shamveel-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "build": "node tools/build-site.mjs",
+    "check": "node --check app.js && node --check projects.js && node --check tile-story.js && node --check tools/build-site.mjs && node --check tools/preview.mjs",
+    "preview": "node tools/preview.mjs"
+  }
+}

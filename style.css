@@ -590,3 +590,11 @@ body.boxed .tile-chapter * { pointer-events: none; }
 @media (max-width: 600px) and (max-height: 600px) {
   .about-content { align-content: start; overflow-y: auto; scrollbar-width: thin; }
 }
+
+/* Startup stays on black until the complete hero has reached the screen. */
+html.hero-loading, html.hero-loading body { overflow: hidden !important; overscroll-behavior: none; }
+html.hero-loading #c { touch-action: none; }
+.loader { background: #000; gap: 24px; }
+.loading-logo { display: block; width: 96px; height: auto; }
+#loading-label { color: #f2f2f2a6; font-size: 11px; letter-spacing: .16em; }
+.project-card-content { display: block; border-radius: 12px; text-decoration: none; }

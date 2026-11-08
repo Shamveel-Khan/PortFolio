@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="hero-loading">
 <head>
 <script type="importmap">{"imports":{"three":"/vendor/three.module.min.js"}}</script>
 
@@ -33,7 +33,7 @@
 <!-- the code and the layout data go first: without this the 3.4 MB of image sheets starved them (three.js only started after the sheets had landed) -->
 <link rel="modulepreload" href="vendor/three.module.min.js"><link rel="preload" href="data/cosmos.json" as="fetch" crossorigin fetchpriority="high">
 <link rel="preload" href="fonts/pp-editorial-old-italic.woff2" as="font" type="font/woff2" crossorigin><!--sheets--><link rel="preload" as="fetch" crossorigin fetchpriority="low" href="atlas/atlas-0.webp?v=1792408552" media="(min-width: 600px) and (min-height: 600px)"><link rel="preload" as="fetch" crossorigin fetchpriority="low" href="atlas/atlas-0-sm.webp?v=1792408552" media="(max-width: 599px), (max-height: 599px)"><link rel="preload" as="fetch" crossorigin fetchpriority="low" href="atlas/atlas-3.webp?v=1792408552" media="(min-width: 600px) and (min-height: 600px)"><link rel="preload" as="fetch" crossorigin fetchpriority="low" href="atlas/atlas-3-sm.webp?v=1792408552" media="(max-width: 599px), (max-height: 599px)"><!--/sheets-->
-<link rel="stylesheet" href="style.css?v=portrait-size-3">
+<link rel="stylesheet" href="style.css?v=categories-loading-4">
 <!-- on big screens the type and the boxes grow with the window, so the page keeps the same proportions as on a laptop -->
 <script>(function () { var r = document.documentElement; function z() { r.style.setProperty("--z", Math.max(1, Math.min(innerWidth / 1600, innerHeight / 900)).toFixed(3)) } z(); addEventListener("resize", z) })()</script>
 </head>
@@ -233,20 +233,13 @@
 </aside>
 
 <div class="hud" id="hud" hidden><span id="hud-label"></span></div>
-<div class="loader" id="loader" aria-label="Loading">
-  <svg class="ld-mark" viewBox="0 0 744 640" aria-hidden="true">
-    <defs>
-      <mask id="ld-m1" maskUnits="userSpaceOnUse" x="-100" y="-100" width="944" height="840"><path class="ld-pen ld-p1" d="M 66 -40 L 402 680" pathLength="1"/></mask>
-      <mask id="ld-m2" maskUnits="userSpaceOnUse" x="-100" y="-100" width="944" height="840"><path class="ld-pen ld-p2" d="M 474 500 C 476 420 478 360 468 310 C 456 262 432 236 436 200 C 440 150 470 100 525 68 C 590 34 680 28 800 18" pathLength="1"/></mask>
-    </defs>
-    <image href="logo-part1.png" width="744" height="640" mask="url(#ld-m1)"/>
-    <image href="logo-part2.png" width="744" height="640" mask="url(#ld-m2)"/>
-    <image class="ld-full" href="logo.png" width="744" height="640"/>
-  </svg>
+<div class="loader" id="loader" role="status" aria-live="polite" aria-label="Loading portfolio">
+  <img class="loading-logo" src="logo.png" width="84" height="72" alt="" fetchpriority="high">
+  <p id="loading-label">Loading</p>
 </div>
 
 
-<script type="module" src="app.js?v=story-2"></script>
+<script type="module" src="app.js?v=categories-loading-4"></script>
 
 </body>
 </html>

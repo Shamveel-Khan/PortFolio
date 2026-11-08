@@ -1,10 +1,17 @@
 // Layout and gallery UI. The canvas below only samples glyph destinations;
 // it is never displayed or used as a Three.js texture.
 export const categories = [
-  ["All Projects", null], ["Full Stack", "Full Stack Development"],
+  ["All", null], ["Full Stack", "Full Stack Development"],
   ["Frontend", "Frontend Development"], ["Backend", "Backend Development"],
-  ["AI/ML", "AI/ML"], ["Cybersecurity", "Cybersecurity"], ["Other", "Other"]
+  ["AI/ML", "AI/ML"], ["Cybersecurity", "Cybersecurity"], ["SQA", "SQA"]
 ]
+
+export function matchesProjectCategory(project, index) {
+  if (index === 0 || project.showInAllCategories) return true
+  const keys = (project.categories || [project.category]).map((category) => category.toLowerCase().replace(/[^a-z]/g, ""))
+  const aliases = [[], ["fullstack", "fullstackdevelopment"], ["frontend", "frontenddevelopment"], ["backend", "backenddevelopment"], ["ai", "aiml", "machinelearning", "artificialintelligence"], ["cybersecurity"], ["sqa", "qa", "softwarequalityassurance"]]
+  return keys.some((key) => aliases[index]?.includes(key))
+}
 
 export function createProjects({ reduced, onExplore }) {
   const root = document.querySelector("#projects"), nav = document.querySelector("#project-categories")
@@ -13,12 +20,6 @@ export function createProjects({ reduced, onExplore }) {
   const state = { progress: 0, offset: 0, selected: 1, hover: 0, targets: [], revision: 0, active: true }
   let data = [], cards = [], generation = 0, width = 0, height = 0, storyHeight = 0, budget = 0, end = 1
   let activeFilter = 0, layoutDirty = true, navTop = 0, navBottom = 0
-  const matchesCategory = (project, index) => {
-    if (index === 0) return true
-    const keys = (project.categories || [project.category]).map((category) => category.toLowerCase().replace(/[^a-z]/g, ""))
-    const aliases = [[], ["fullstack", "fullstackdevelopment"], ["frontend", "frontenddevelopment"], ["backend", "backenddevelopment"], ["ai", "aiml", "machinelearning", "artificialintelligence"], ["cybersecurity"]]
-    return index === 6 ? !keys.some((key) => aliases.some((values) => values.includes(key))) : keys.some((key) => aliases[index].includes(key))
-  }
   const buttons = categories.map(([label], index) => {
     const b = document.createElement("button")
     b.type = "button"; b.className = "tile-category"; b.dataset.category = index
@@ -45,13 +46,16 @@ export function createProjects({ reduced, onExplore }) {
     grid.replaceChildren()
     cards = data.map((p) => {
       const article = document.createElement("article"); article.className = "project-card"
-      const a = document.createElement("a"); a.href = p.link; a.target = "_blank"; a.rel = "noopener noreferrer"
+      const a = document.createElement(p.link ? "a" : "div")
+      a.className = "project-card-content"
+      if (p.link) { a.href = p.link; a.target = "_blank"; a.rel = "noopener noreferrer" }
       const media = document.createElement("div"); media.className = "project-card-media"
       const img = document.createElement("img"); img.src = p.imageUrl; img.alt = p.name; img.loading = "lazy"; img.decoding = "async"
       img.width = 960; img.height = 600
       img.addEventListener("error", () => { img.hidden = true; media.classList.add("image-unavailable") }, { once: true })
       const arrow = document.createElement("span"); arrow.className = "project-arrow"; arrow.textContent = "↗"; arrow.setAttribute("aria-hidden", "true")
-      media.append(img, arrow)
+      media.append(img)
+      if (p.link) media.append(arrow)
       const meta = document.createElement("div"); meta.className = "project-card-meta"
       const cat = document.createElement("span"); cat.textContent = p.category
       const date = document.createElement("span"); date.textContent = p.date
@@ -69,7 +73,7 @@ export function createProjects({ reduced, onExplore }) {
     activeFilter = index; state.selected = index + 1
     buttons.forEach((b, i) => b.setAttribute("aria-pressed", String(i === index)))
     const token = ++generation
-    const visible = cards.filter(({ project }) => matchesCategory(project, index))
+    const visible = cards.filter(({ project }) => matchesProjectCategory(project, index))
     grid.setAttribute("aria-busy", "true")
     // The grid keeps its height during the exit, so a filter never moves the scroll position.
     grid.style.minHeight = `${grid.getBoundingClientRect().height}px`
@@ -81,7 +85,7 @@ export function createProjects({ reduced, onExplore }) {
     if (token !== generation) return
     cards.forEach(({ article, project }) => {
       article.getAnimations().forEach((a) => a.cancel())
-      article.hidden = !matchesCategory(project, index)
+      article.hidden = !matchesProjectCategory(project, index)
     })
     document.querySelector("#project-empty").hidden = visible.length > 0
     status.textContent = `${visible.length} ${visible.length === 1 ? "project" : "projects"} · ${categories[index][0]}`
@@ -95,7 +99,15 @@ export function createProjects({ reduced, onExplore }) {
   }
 
   fetch("data/projects.json").then((r) => { if (!r.ok) throw new Error("Project data unavailable"); return r.json() })
-    .then((projects) => { data = projects; render() })
+    .then((projects) => {
+      const seen = new Set()
+      data = projects.filter((project) => {
+        const key = project.id || project.name.toLowerCase().trim()
+        if (seen.has(key)) return false
+        seen.add(key); return true
+      })
+      render()
+    })
     .catch(() => { status.textContent = "Projects could not load. Please refresh to try again." })
   document.querySelector("#explore-cosmos").addEventListener("click", onExplore)
   document.querySelector("#projects-top").addEventListener("click", () => scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" }))
@@ -173,7 +185,7 @@ export function createProjects({ reduced, onExplore }) {
       nav.style.transform = `translateY(${-state.offset}px)`
       const ready = state.active && raw > .94 && state.offset < navBottom && !document.body.classList.contains("boxed")
       nav.inert = !ready; nav.setAttribute("aria-hidden", String(!ready))
-      root.inert = !state.active
+      root.inert = !state.active || document.documentElement.classList.contains("hero-loading")
       document.body.classList.toggle("projects-formed", ready)
       document.body.style.setProperty("--projects-progress", state.active ? state.progress : 0)
       return state

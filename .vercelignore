@@ -1,0 +1,15 @@
+.git
+.agents
+.codex
+.aws
+.vercel
+node_modules
+dist
+.env
+.env.*
+*.log
+data/old
+data/cosmos.backup.json
+download-report.json
+tools/*.py
+profile2.png

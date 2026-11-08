@@ -6,7 +6,7 @@
   "backLabel": "Back to the beginning ↑",
   "links": [
     { "id": "github", "label": "GitHub", "url": "https://github.com/Shamveel-Khan", "icon": "github" },
-    { "id": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/your-linkedin-profile/", "icon": "linkedin" },
-    { "id": "gmail", "label": "Gmail", "url": "mailto:your-email@gmail.com", "icon": "gmail" }
+    { "id": "linkedin", "label": "LinkedIn", "url": "https://linkedin.com/in/shamveel-khan", "icon": "linkedin" },
+    { "id": "gmail", "label": "Gmail", "url": "mailto:shamveelkhilji@gmail.com", "icon": "gmail" }
   ]
 }

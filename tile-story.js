@@ -39,9 +39,12 @@ export function createTileStory({ reduced }) {
     document.title = title
     document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').forEach((el) => el.content = p.heroIntro)
     document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]').forEach((el) => el.content = title)
-    document.querySelector('link[rel="canonical"]').href = new URL(location.pathname, location.origin).href
-    document.querySelector('meta[property="og:url"]').content = new URL(location.pathname, location.origin).href
-    document.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]').forEach((el) => el.content = new URL(p.portrait, location.origin).href)
+    const canonical = document.querySelector('link[rel="canonical"]')
+    // Production builds supply an absolute canonical URL. Preserve that URL on
+    // preview deployments instead of replacing it with the current preview host.
+    if (!/^https?:\/\//.test(canonical.getAttribute("href") || "")) canonical.href = new URL(location.pathname, location.origin).href
+    document.querySelector('meta[property="og:url"]').content = canonical.href
+    document.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]').forEach((el) => el.content = new URL(p.portrait, new URL(canonical.href).origin).href)
     contactNav.setAttribute("aria-label", `Contact ${p.name}`)
     anchors = c.links.map((link, i) => {
       const a = makeLink(link); a.className = "contact-hit-target"; a.setAttribute("aria-label", link.label)
