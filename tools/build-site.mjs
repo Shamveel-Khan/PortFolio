@@ -75,6 +75,8 @@ let html = await readFile(resolve(output, "index.html"), "utf8")
 // Verify direct HTML and CSS references before shipping the output directory.
 for (const match of html.matchAll(/\b(?:src|href)="([^"]+)"/g)) {
   const url = match[1]
+  // Vercel supplies this endpoint at deployment time; it is not a source asset.
+  if (url === "/_vercel/insights/script.js") continue
   if (/^(?:https?:|mailto:|data:|#|\?)/.test(url) || url === "/") continue
   if (!url.includes("/?")) required(url)
 }

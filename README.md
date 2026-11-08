@@ -18,6 +18,12 @@ Static Three.js portfolio with one shared tile mesh driving the Hero, Projects, 
 
 4. Click **Deploy**. No custom environment variables are needed.
 
+To collect traffic statistics, open the project's **Analytics** tab in Vercel,
+enable **Web Analytics**, then deploy this version. The HTML already includes
+the deferred `/_vercel/insights/script.js` integration; no npm package is needed.
+Vercel supplies that endpoint in deployments, so it is not available in the local
+static preview. See the [official setup guide](https://vercel.com/docs/analytics/quickstart).
+
 The settings follow [Vercel's project configuration](https://vercel.com/docs/project-configuration/vercel-json). Vercel serves only the generated `dist/` directory. Missing paths return a real 404; there is no catch-all rewrite that could turn a missing JSON file or JavaScript module into HTML.
 
 ## Local verification
